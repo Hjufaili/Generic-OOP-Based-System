@@ -3,7 +3,17 @@ import java.util.List;
 import java.util.Scanner;
 
 public class MainDriver {
+    public static List<Item> itemsList = new ArrayList<>();
+    public static Integer itemOption = 0;
+    public static Scanner scanner = new Scanner(System.in);
 
+
+    public static void main(String[] args) {
+        while (itemOption != 5) {
+            showItemMenu();
+
+        }
+    }
 
 
     public static void showItemMenu() {
@@ -18,8 +28,6 @@ public class MainDriver {
                 Please enter your choice:
                 """);
     }
-
-
 
 
 }
