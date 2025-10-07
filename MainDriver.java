@@ -18,6 +18,8 @@ public class MainDriver {
                 editExistingItem();
             }else if (itemOption == 3) {
                 removeItem();
+            }else if (itemOption == 4) {
+                displayAllItems();
             }
 
         }
@@ -121,6 +123,18 @@ public class MainDriver {
 
         if (!removed) {
             System.out.println("No item found with ID: " + userInput);
+        }
+    }
+    public static void displayAllItems() {
+        if (itemsList.isEmpty()) {
+            System.out.println("No items");
+            return;
+        }
+        System.out.println("Display All Items");
+        for (Item c : itemsList) {
+            System.out.println("the name of item is "+c.getName()+
+                    "\n the price is "+c.getPrice());
+
         }
     }
 
