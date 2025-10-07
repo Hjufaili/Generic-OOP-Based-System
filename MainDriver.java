@@ -14,6 +14,8 @@ public class MainDriver {
             itemOption = scanner.nextInt();
             if (itemOption == 1) {
                 addNewItem();
+            } else if (itemOption == 2) {
+                editExistingItem();
             }
 
         }
@@ -61,6 +63,39 @@ public class MainDriver {
             if (userInput.equalsIgnoreCase("q")) {
                 flag = false;
             }
+        }
+    }
+    public static void editExistingItem() {
+        System.out.println("Enter the name of the item you want to edit:");
+        scanner.nextLine();
+        String itemName = scanner.nextLine();
+
+        while (HelperUtils.isNull(itemName) || HelperUtils.checkIfEmptyOrBlank(itemName)) {
+            System.out.println("Please enter a valid name:");
+            itemName = scanner.nextLine();
+        }
+
+        boolean found = false;
+        for (Item item : itemsList) {
+            if (item.getName().equals(itemName)) {
+                System.out.println("Enter the new name for the item:");
+                String newName = scanner.nextLine();
+
+                while (HelperUtils.isNull(newName) || HelperUtils.checkIfEmptyOrBlank(newName) ||
+                        (checkIfItemNameExists(newName) && !newName.equals(itemName))) {
+                    System.out.println("Name is invalid or already exists. Enter a different name:");
+                    newName = scanner.nextLine();
+                }
+
+                item.setName(newName);
+                System.out.println("Item edited successfully!");
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            System.out.println("No item found with the name: " + itemName);
         }
     }
 
