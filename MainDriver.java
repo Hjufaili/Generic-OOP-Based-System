@@ -3,6 +3,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class MainDriver {
+
+
     public static List<Item> itemsList = new ArrayList<>();
     public static Integer itemOption = 0;
     public static Scanner scanner = new Scanner(System.in);
@@ -16,15 +18,20 @@ public class MainDriver {
                 addNewItem();
             } else if (itemOption == 2) {
                 editExistingItem();
-            }else if (itemOption == 3) {
+            } else if (itemOption == 3) {
                 removeItem();
-            }else if (itemOption == 4) {
+            } else if (itemOption == 4) {
                 displayAllItems();
-            }
 
+            } else if (itemOption == 5) {
+                System.out.println("Exit from item");
+                itemOption = 5;
+
+            } else {
+                System.out.println("Please enter a number from the menu");
+            }
         }
     }
-
 
     public static void showItemMenu() {
         System.out.println("""
@@ -38,6 +45,8 @@ public class MainDriver {
                 Please enter your choice:
                 """);
     }
+
+
     public static void addNewItem() {
         System.out.println("Add a new item");
         boolean flag = true;
@@ -69,6 +78,7 @@ public class MainDriver {
             }
         }
     }
+
     public static void editExistingItem() {
         System.out.println("Enter the name of the item you want to edit:");
         scanner.nextLine();
@@ -102,6 +112,7 @@ public class MainDriver {
             System.out.println("No item found with the name: " + itemName);
         }
     }
+
     public static void removeItem() {
         System.out.println("Enter the ID of the item to remove:");
         Integer userInput = scanner.nextInt();
@@ -125,6 +136,7 @@ public class MainDriver {
             System.out.println("No item found with ID: " + userInput);
         }
     }
+
     public static void displayAllItems() {
         if (itemsList.isEmpty()) {
             System.out.println("No items");
@@ -136,6 +148,25 @@ public class MainDriver {
                     "\n the price is "+c.getPrice());
 
         }
+    }
+
+
+    public static boolean checkIfItemIdExists(int idToCheck) {
+        for (Item item : itemsList) {
+            if (item.getId() == idToCheck) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean checkIfItemNameExists(String nameToCheck) {
+        for (Item item : itemsList) {
+            if (item.getName().equals(nameToCheck)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
