@@ -16,6 +16,8 @@ public class MainDriver {
                 addNewItem();
             } else if (itemOption == 2) {
                 editExistingItem();
+            }else if (itemOption == 3) {
+                removeItem();
             }
 
         }
@@ -96,6 +98,29 @@ public class MainDriver {
 
         if (!found) {
             System.out.println("No item found with the name: " + itemName);
+        }
+    }
+    public static void removeItem() {
+        System.out.println("Enter the ID of the item to remove:");
+        Integer userInput = scanner.nextInt();
+
+        if (userInput == null || userInput < 0) {
+            System.out.println("Invalid input");
+            return;
+        }
+
+        boolean removed = false;
+        for (int i = 0; i < itemsList.size(); i++) {
+            if (itemsList.get(i).getId().equals(userInput)) {
+                itemsList.remove(i);
+                System.out.println("Item removed successfully!");
+                removed = true;
+                break;
+            }
+        }
+
+        if (!removed) {
+            System.out.println("No item found with ID: " + userInput);
         }
     }
 
