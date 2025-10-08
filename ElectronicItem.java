@@ -2,6 +2,7 @@ public class ElectronicItem {
     private Integer id;
     private String name;
     private Double price;
+    private String brand;
 
     public Integer getId() {
         return id;
@@ -25,5 +26,13 @@ public class ElectronicItem {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 }
