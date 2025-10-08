@@ -2,10 +2,18 @@ public class FurnitureItem {
     private Integer id;
     private String name;
     private Double price;
-
+    private String brand;
 
     public Integer getId() {
         return id;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 
     public void setId(Integer id) {
