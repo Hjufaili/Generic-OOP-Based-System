@@ -2,6 +2,8 @@ public class StationeryItem {
     private Integer id;
     private String name;
     private Double price;
+    private String brand;
+
 
     public Integer getId() {
         return id;
@@ -9,6 +11,14 @@ public class StationeryItem {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 
     public String getName() {
