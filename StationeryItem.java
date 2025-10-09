@@ -2,20 +2,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class StationeryItem {
-    private Integer id;
-    private String name;
-    private Float price;
+public class StationeryItem extends Item {
+
     private String brand;
 
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getBrand() {
         return brand;
@@ -25,21 +15,6 @@ public class StationeryItem {
         this.brand = brand;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Float getPrice() {
-        return price;
-    }
-
-    public void setPrice(Float price) {
-        this.price = price;
-    }
 
     private static List<StationeryItem> stationeryList = new ArrayList<>();
     public static Scanner scanner = new Scanner(System.in);
