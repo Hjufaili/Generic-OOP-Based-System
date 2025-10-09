@@ -5,87 +5,141 @@ import java.util.Scanner;
 public class ItemService {
 
     private static List<Item> itemsList = new ArrayList<>();
-    public static Integer itemOption = 0;
     public static Scanner scanner = new Scanner(System.in);
-
-    public static void showItemMenu() {
-        System.out.println("""
-                =====Item Management Menu=====
-                1- Add a new item
-                2- Edit an Existing Item
-                3- Remove an Item
-                4- Display All Items
-                5- Exit
-                ==============================
-                Please enter your choice:
-                """);
-    }
 
 
     public static void addNewItem() {
-        System.out.println("Add a new item");
-        boolean flag = true;
-        while (flag) {
-            Item item = new Item();
-            System.out.println("Enter the item id");
-            Integer itemId = scanner.nextInt();
-            while (itemId == null || itemId < 0 || checkIfItemIdExists(itemId)) {
-                System.out.println("Input is not accepted, please enter another ID");
-                itemId = scanner.nextInt();
-            }
-            item.setId(itemId);
-            scanner.nextLine();
-            System.out.println("Enter item name");
-            String itemName = scanner.nextLine();
-            item.setName(itemName);
+        System.out.println("Select item type:");
+        System.out.println("1 - General Item");
+        System.out.println("2 - Electronic Item");
+        System.out.println("3 - Furniture Item");
+        System.out.println("4 - Stationery Item");
+        int type = scanner.nextInt();
+        scanner.nextLine();
 
-            System.out.println("Enter item price");
-            float itemPrice = scanner.nextFloat();
-            scanner.nextLine();
-            item.setPrice(itemPrice);
-
-            itemsList.add(item);
-            System.out.println("The item successfully added");
-            System.out.println("Do you want to exit press (q) or press anything else to cont. !");
-            String userInput = scanner.nextLine();
-            if (userInput.equalsIgnoreCase("q")) {
-                flag = false;
-            }
+        Item item;
+        switch (type) {
+            case 2 -> item = new ElectronicItem();
+            case 3 -> item = new FurnitureItem();
+            case 4 -> item = new StationeryItem();
+            default -> item = new Item();
         }
+
+        System.out.println("Enter the item ID:");
+        Integer itemId = scanner.nextInt();
+        while (itemId == null || itemId < 0 || checkIfItemIdExists(itemId)) {
+            System.out.println("Invalid or duplicate ID. Enter another:");
+            itemId = scanner.nextInt();
+        }
+        item.setId(itemId);
+        scanner.nextLine();
+
+        System.out.println("Enter item name:");
+        String name = scanner.nextLine();
+        while (HelperUtils.isNull(name) || HelperUtils.checkIfEmptyOrBlank(name)) {
+            System.out.println("Name cannot be empty. Try again:");
+            name = scanner.nextLine();
+        }
+        item.setName(name);
+
+        System.out.println("Enter item price:");
+        float price = scanner.nextFloat();
+        item.setPrice(price);
+        scanner.nextLine();
+
+        if (item instanceof ElectronicItem electronic) {
+            System.out.println("Enter brand:");
+            electronic.setBrand(scanner.nextLine());
+        } else if (item instanceof FurnitureItem furniture) {
+            System.out.println("Enter brand:");
+            furniture.setBrand(scanner.nextLine());
+        } else if (item instanceof StationeryItem stationery) {
+            System.out.println("Enter brand:");
+            stationery.setBrand(scanner.nextLine());
+        }
+
+        itemsList.add(item);
+        System.out.println("Item added successfully!");
     }
 
     public static void editExistingItem() {
-        System.out.println("Enter the name of the item you want to edit:");
-        scanner.nextLine();
-        String itemName = scanner.nextLine();
+        System.out.println("Enter the ID of the item you want to edit:"); // 👈 Better to use ID (names may not be unique)
+        Integer itemId = scanner.nextInt();
+        scanner.nextLine(); // consume newline
 
-        while (HelperUtils.isNull(itemName) || HelperUtils.checkIfEmptyOrBlank(itemName)) {
-            System.out.println("Please enter a valid name:");
-            itemName = scanner.nextLine();
-        }
-
-        boolean found = false;
+        Item foundItem = null;
         for (Item item : itemsList) {
-            if (item.getName().equals(itemName)) {
-                System.out.println("Enter the new name for the item:");
-                String newName = scanner.nextLine();
-
-                while (HelperUtils.isNull(newName) || HelperUtils.checkIfEmptyOrBlank(newName) ||
-                        (checkIfItemNameExists(newName) && !newName.equals(itemName))) {
-                    System.out.println("Name is invalid or already exists. Enter a different name:");
-                    newName = scanner.nextLine();
-                }
-
-                item.setName(newName);
-                System.out.println("Item edited successfully!");
-                found = true;
+            if (item.getId().equals(itemId)) {
+                foundItem = item;
                 break;
             }
         }
 
-        if (!found) {
-            System.out.println("No item found with the name: " + itemName);
+        if (foundItem == null) {
+            System.out.println("No item found with ID: " + itemId);
+            return;
         }
+
+        // Edit common fields (name, price)
+        System.out.println("Current name: " + foundItem.getName());
+        System.out.println("Enter new name (or press Enter to keep current):");
+        String newName = scanner.nextLine();
+        if (!newName.isEmpty()) {
+            // Optional: check for duplicate name among other items (excluding self)
+            boolean nameExists = false;
+            for (Item item : itemsList) {
+                if (!item.getId().equals(foundItem.getId()) && item.getName().equals(newName)) {
+                    nameExists = true;
+                    break;
+                }
+            }
+            if (nameExists) {
+                System.out.println("Name already exists. Keeping current name.");
+            } else {
+                foundItem.setName(newName);
+            }
+        }
+
+        System.out.println("Current price: " + foundItem.getPrice());
+        System.out.println("Enter new price (or press Enter to keep current):");
+        String priceInput = scanner.nextLine();
+        if (!priceInput.isEmpty()) {
+            try {
+                float newPrice = Float.parseFloat(priceInput);
+                if (newPrice >= 0) {
+                    foundItem.setPrice(newPrice);
+                } else {
+                    System.out.println("Price must be non-negative. Keeping current price.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid price. Keeping current price.");
+            }
+        }
+
+        if (foundItem instanceof ElectronicItem electronic) {
+            System.out.println("Current brand: " + electronic.getBrand());
+            System.out.println("Enter new brand (or press Enter to keep current):");
+            String brand = scanner.nextLine();
+            if (!brand.isEmpty()) {
+                electronic.setBrand(brand);
+            }
+        } else if (foundItem instanceof FurnitureItem furniture) {
+            System.out.println("Current brand: " + furniture.getBrand());
+            System.out.println("Enter new brand (or press Enter to keep current):");
+            String brand = scanner.nextLine();
+            if (!brand.isEmpty()) {
+                furniture.setBrand(brand);
+            }
+        } else if (foundItem instanceof StationeryItem stationery) {
+            System.out.println("Current brand: " + stationery.getBrand());
+            System.out.println("Enter new brand (or press Enter to keep current):");
+            String brand = scanner.nextLine();
+            if (!brand.isEmpty()) {
+                stationery.setBrand(brand);
+            }
+        }
+
+        System.out.println("Item updated successfully!");
     }
 
     public static void removeItem() {
@@ -114,14 +168,25 @@ public class ItemService {
 
     public static void displayAllItems() {
         if (itemsList.isEmpty()) {
-            System.out.println("No items");
+            System.out.println("No items.");
             return;
         }
-        System.out.println("Display All Items");
-        for (Item c : itemsList) {
-            System.out.println("the name of item is " + c.getName() +
-                    "\n the price is " + c.getPrice());
 
+        for (Item item : itemsList) {
+            System.out.println("Name: " + item.getName());
+            System.out.println("Price: " + item.getPrice());
+            System.out.println("ID: " + item.getId());
+
+            if (item instanceof ElectronicItem e) {
+                System.out.println("Type: Electronic, Brand: " + e.getBrand());
+            } else if (item instanceof FurnitureItem f) {
+                System.out.println("Type: Furniture, Brand: " + f.getBrand());
+            } else if (item instanceof StationeryItem s) {
+                System.out.println("Type: Stationery, Brand: " + s.getBrand());
+            } else {
+                System.out.println("Type: General Item");
+            }
+            System.out.println("------------------------");
         }
     }
 
