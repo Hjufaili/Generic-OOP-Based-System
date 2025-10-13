@@ -10,8 +10,20 @@ public class MainDriver {
 
 
     public static void main(String[] args) {
+
+        /*
+        switch (itemOption) {
+
+            case 1 -> ItemService.addNewItem();
+            case 2 -> ItemService.editExistingItem();
+            case 3 -> ItemService.removeItem();
+            case 4 -> ItemService.displayAllItems();
+        }
+
+         */
+
         while (itemOption != 5) {
-                ItemService.showItemMenu();
+            showItemMenu();
             itemOption = scanner.nextInt();
             if (itemOption == 1) {
                 ItemService.addNewItem();
@@ -32,7 +44,17 @@ public class MainDriver {
         }
     }
 
-
-
+    public static void showItemMenu() {
+        System.out.println("""
+                =====Item Management Menu=====
+                1- Add a new item
+                2- Edit an Existing Item
+                3- Remove an Item
+                4- Display All Items
+                5- Exit
+                ==============================
+                Please enter your choice:
+                """);
+    }
 
 }
