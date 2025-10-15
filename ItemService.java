@@ -7,7 +7,6 @@ public class ItemService {
     private static List<Item> itemsList = new ArrayList<>();
     public static Scanner scanner = new Scanner(System.in);
 
-    // In ItemService.java
 
     public static Integer inputId() {
         System.out.println("Enter the item ID:");
@@ -41,10 +40,12 @@ public class ItemService {
 
     public static void save(Item item) {
         itemsList.add(item);
+        System.out.println("Item added successfully!");
+
     }
 
     public static void editCommonFields(Item item) {
-        // Edit name
+
         System.out.println("Current name: " + item.getName());
         System.out.println("Enter new name (or press Enter to keep current):");
         String newName = scanner.nextLine();
@@ -63,7 +64,7 @@ public class ItemService {
             }
         }
 
-        // Edit price
+
         System.out.println("Current price: " + item.getPrice());
         System.out.println("Enter new price (or press Enter to keep current):");
         String priceInput = scanner.nextLine();
@@ -103,6 +104,8 @@ public class ItemService {
         item.setId(inputId());
         item.setName(inputName());
         item.setPrice(inputPrice());
+
+
         save(item);
         System.out.println("General item added successfully!");
     }
@@ -141,28 +144,40 @@ public class ItemService {
     }
 
     public static void removeItem() {
-        System.out.println("Enter the ID of the item to remove:");
-        Integer userInput = scanner.nextInt();
+        Integer id = getIdToRemove();
+        remove(id);
+    }
 
-        if (userInput == null || userInput < 0) {
-            System.out.println("Invalid input");
+    public static Integer getIdToRemove() {
+        if (itemsList.isEmpty()) {
+            System.out.println("No items available to remove.");
+            return null;
+        }
+
+        System.out.print("Enter the ID of the item to remove: ");
+            Integer id = scanner.nextInt();
+            scanner.nextLine();
+            return id;
+
+    }
+
+    public static void remove(Integer id) {
+        if (id == null || id < 0) {
+            System.out.println("Invalid ID. No item removed.");
             return;
         }
 
-        boolean removed = false;
-        for (int i = 0; i < itemsList.size(); i++) {
-            if (itemsList.get(i).getId().equals(userInput)) {
-                itemsList.remove(i);
-                System.out.println("Item removed successfully!");
-                removed = true;
-                break;
-            }
-        }
 
-        if (!removed) {
-            System.out.println("No item found with ID: " + userInput);
+        if (checkIfItemIdExists(id)) {
+            itemsList.removeIf(item -> item.getId().equals(id));
+            System.out.println("Item removed successfully!");
+        } else {
+            System.out.println("No item found with ID: " + id);
         }
     }
+
+
+
 
     public static void displayAllItems() {
         if (itemsList.isEmpty()) {
@@ -198,6 +213,40 @@ public class ItemService {
         }
         return false;
     }
+
+     /*public static Item addInput() {
+        Item item = new Item();
+
+        System.out.println("Enter the item ID:");
+        Integer itemId = scanner.nextInt();
+        scanner.nextLine();
+
+        while (itemId == null || itemId < 0 || checkIfItemIdExists(itemId)) {
+            System.out.println("Invalid or duplicate ID. Enter another:");
+            itemId = scanner.nextInt();
+            scanner.nextLine();
+        }
+
+        System.out.println("Enter item name:");
+        String name = scanner.nextLine();
+        while (HelperUtils.isNull(name) || HelperUtils.checkIfEmptyOrBlank(name)) {
+            System.out.println("Name cannot be empty. Try again:");
+            name = scanner.nextLine();
+        }
+
+        System.out.println("Enter item price:");
+        float price = scanner.nextFloat();
+        scanner.nextLine();
+
+        item.setId(itemId);
+        item.setName(name);
+        item.setPrice(price);
+
+        return item;
+
+    }
+
+     */
 
     /*
     public static void addNewItem() {
@@ -332,6 +381,32 @@ public class ItemService {
         System.out.println("Item updated successfully!");
     }
     */
+
+    /*public static void removeItem() {
+        System.out.println("Enter the ID of the item to remove:");
+        Integer userInput = scanner.nextInt();
+
+        if (userInput == null || userInput < 0) {
+            System.out.println("Invalid input");
+            return;
+        }
+
+        boolean removed = false;
+        for (int i = 0; i < itemsList.size(); i++) {
+            if (itemsList.get(i).getId().equals(userInput)) {
+                itemsList.remove(i);
+                System.out.println("Item removed successfully!");
+                removed = true;
+                break;
+            }
+        }
+
+        if (!removed) {
+            System.out.println("No item found with ID: " + userInput);
+        }
+    }
+
+     */
 
 
 }
